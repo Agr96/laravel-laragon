@@ -1,0 +1,22 @@
+# Memastikan runtime PHP yang digunakan kompatibel dengan Laravel
+[phases.setup]
+nixPkgs = ["php83", "composer", "nodejs_20"]
+
+# Tahap build yang mengunci semua dependency di lokasi yang tepat
+[phases.build]
+cmds = [
+    "composer install --no-dev --optimize-autoloader",
+    "npm install",
+    "npm run build"
+]
+
+# Tahap runtime/start yang memastikan file sistem Laravel siap digunakan
+[start]
+cmd = "php-fpm -D && nginx -g 'daemon off;'"
+
+# Menjamin folder storage dan cache bisa ditulis oleh web server
+[phases.postbuild]
+cmds = [
+    "mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views",
+    "chmod -R 775 storage bootstrap/cache"
+]
