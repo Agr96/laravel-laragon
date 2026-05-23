@@ -1,47 +1,49 @@
-import jQuery from 'jquery';
-window.$ = jQuery;
-window.jQuery = jQuery;
+console.log("Vite JS aktif");
 
-$(document).ready(function() {
-    console.log('✅ Local jQuery + Vite Active!');
+// MOBILE MENU
+document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("mobile-menu-btn");
+    const menu = document.getElementById("mobile-menu");
 
-    // 1. Interaksi Mobile Menu (Slide Toggle)
-    $('#mobile-menu-btn').on('click', function() {
-        $('#mobile-menu').slideToggle(300);
-    });
-
-    // 2. Smooth Scrolling untuk link yang ada hashtag-nya
-    $('a[href^="#"]').on('click', function(e) {
-        e.preventDefault();
-        let target = this.hash;
-        if (target) {
-            $('html, body').animate({
-                scrollTop: $(target).offset().top - 64 // Dikurangi 64px agar tidak tertutup navbar
-            }, 600, 'swing');
-
-            // Tutup menu mobile jika link diklik (UX yang baik)
-            if ($(window).width() < 768) {
-                $('#mobile-menu').slideUp(300);
-            }
-        }
-    });
-
-    // 3. Scroll Reveal Animation (Elemen muncul saat di-scroll)
-    function revealOnScroll() {
-        let windowHeight = $(window).height();
-        let scrollTop = $(window).scrollTop();
-
-        $('.reveal-item').each(function() {
-            let elementTop = $(this).offset().top;
-
-            // Jika elemen sudah masuk jangkauan layar (dengan sedikit offset 100px)
-            if (elementTop < (scrollTop + windowHeight - 100)) {
-                $(this).removeClass('opacity-0 translate-y-10').addClass('opacity-100 translate-y-0');
-            }
+    if (btn && menu) {
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
         });
     }
 
-    // Jalankan fungsi saat pertama kali load dan saat di-scroll
-    revealOnScroll();
-    $(window).on('scroll', revealOnScroll);
+    // SMOOTH SCROLL
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+        link.addEventListener("click", (e) => {
+            const targetId = link.getAttribute("href");
+            const target = document.querySelector(targetId);
+
+            if (!target) return;
+
+            e.preventDefault();
+
+            window.scrollTo({
+                top: target.offsetTop - 64,
+                behavior: "smooth",
+            });
+        });
+    });
+
+    // REVEAL ANIMATION (FIXED)
+    const items = document.querySelectorAll(".reveal-item");
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove("opacity-0", "translate-y-10");
+                    entry.target.classList.add("opacity-100", "translate-y-0");
+                }
+            });
+        },
+        {
+            threshold: 0.1,
+        }
+    );
+
+    items.forEach((el) => observer.observe(el));
 });
