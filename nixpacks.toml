@@ -8,6 +8,10 @@ cmds = [
     "npm run build"
 ]
 
+# Tambahkan bagian ini agar Nixpacks tahu ini aplikasi PHP
+[variables]
+NIXPACKS_PHP_ROOT = "/app/public"
+
 [start]
 cmd = "php-fpm -D && nginx -g 'daemon off;'"
 
