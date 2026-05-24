@@ -47,3 +47,60 @@ document.addEventListener("DOMContentLoaded", () => {
 
     items.forEach((el) => observer.observe(el));
 });
+
+// counter number
+document.addEventListener("DOMContentLoaded", () => {
+
+    // MODULE: Counter on Scroll
+    (() => {
+        const counters = document.querySelectorAll(".counter");
+        if (counters.length === 0) return;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const element = entry.target;
+                    element.textContent = "0";
+
+                    const start = 0;
+                    const end = parseFloat(element.getAttribute("data-countto")) || 0;
+                    const duration = parseInt(element.getAttribute("data-duration"), 10) || 1000;
+                    let startTime = null;
+
+                    const updateCount = (currentTime) => {
+                        if (!startTime) startTime = currentTime;
+                        const progress = Math.min((currentTime - startTime) / duration, 1);
+                        const currentCount = start + progress * (end - start);
+
+                        element.textContent = Math.floor(currentCount);
+
+                        if (progress < 1) {
+                            requestAnimationFrame(updateCount);
+                        } else {
+                            element.textContent = end;
+                        }
+                    };
+
+                    requestAnimationFrame(updateCount);
+                    observer.unobserve(element);
+                }
+            });
+        }, { root: null, threshold: 0.2 });
+
+        counters.forEach((element) => {
+            element.textContent = "0";
+            observer.observe(element);
+        });
+    })();
+
+    // FUNGSI LAIN DI BAWAH INI
+
+});
+
+
+
+// import gambar
+// Buka resources/js/app.js dan tambahkan baris ini di paling bawah:
+import.meta.glob([
+    '../images/**',
+]);
