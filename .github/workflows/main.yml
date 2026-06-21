@@ -6,8 +6,7 @@ on:
   pull_request:
     branches: [main, master]
 
-env:
-  IMAGE_NAME: ghcr.io/${{ github.repository }}
+# IMAGE_NAME global dihapus dari sini karena akan diatur secara dinamis di dalam job
 
 jobs:
   build:
@@ -27,10 +26,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Mengubah nama repositori menjadi huruf kecil dan menyimpannya ke GITHUB_ENV
+      - name: Convert image name to lowercase
+        run: |
+          echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+
       # create a unique tag for each build for debugging
       - name: Set Docker tag
         id: date
-        run: echo "DATE_STAMP=$(date +%s)" > "$GITHUB_ENV"
+        run: echo "DATE_STAMP=$(date +%s)" >> "$GITHUB_ENV"
 
       - name: Build and push Docker images
         uses: iloveitaly/github-action-nixpacks@main
