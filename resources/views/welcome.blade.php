@@ -25,7 +25,7 @@
         <div class="flex justify-between items-center h-16">
 
             <div class="flex-shrink-0">
-                <a href="#home" class="text-xl font-extrabold text-gray-900 tracking-tight">AeroRental.Bali<span class="text-blue-600">.Bali</span></a>
+                <a href="#home" class="text-xl font-extrabold text-gray-900 tracking-tight">AeroRental<span class="text-blue-600">.Bali</span> now part of t4f.tech</a>
             </div>
 
             <div class="hidden md:flex space-x-8">
